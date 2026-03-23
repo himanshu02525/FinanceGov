@@ -1,0 +1,5 @@
+package com.financegov.model;
+
+public class Resource {
+
+}
