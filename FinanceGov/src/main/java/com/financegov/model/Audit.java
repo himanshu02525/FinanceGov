@@ -1,6 +1,8 @@
 package com.financegov.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.financegov.enums.AuditScope;
 import com.financegov.enums.AuditStatus;
@@ -21,12 +23,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
-@Entity
+@NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "Audit")
-//@AuditFindingsRequiredIfCompleted
 public class Audit {
 
 	@Id
@@ -36,25 +37,28 @@ public class Audit {
 
 	@NotNull(message = "{audit.officerId.notNull}")
 	@Positive(message = "{audit.officerId.positive}")
-	@Column(name = "OfficerID", nullable = false,updatable = false)
+	@Column(name = "OfficerID", nullable = false, updatable = false)
 	private Long officerId;
 
 	@NotNull(message = "{audit.scope.notNull}")
 	@Enumerated(EnumType.STRING)
-	@Column(name = "Scope", nullable = false, length = 50)
+	@Column(name = "Scope", nullable = false, length = 50, updatable = false)
 	private AuditScope scope;
 
 	@Size(max = 2000, message = "{audit.findings.size}")
 	@Column(name = "Findings", length = 2000)
 	private String findings;
 
-	@NotNull(message = "{audit.date.notNull}")
-	@PastOrPresent(message = "{audit.date.pastOrPresent}")
-	@Column(name = "Date", nullable = false)
-	private LocalDate date;
-
 	@NotNull(message = "{audit.status.notNull}")
-	@Column(name = "Status", nullable = false)
 	@Enumerated(EnumType.STRING)
+	@Column(name = "Status", nullable = false)
 	private AuditStatus status;
+
+	@CreationTimestamp
+	@Column(name = "CreatedAt", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
+
+	@PastOrPresent(message = "{audit.closedAt.pastOrPresent}")
+	@Column(name = "ClosedAt")
+	private LocalDateTime closedAt;
 }
