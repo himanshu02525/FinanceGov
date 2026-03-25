@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.financegov.model.Report;
 
 @Repository  //create bean component-->to communicate with database
-
+// jpa
 //Jpa Repository take entity name of model and primary keys datatype
 public interface ReportRepository extends JpaRepository<Report, Integer> { // to perform basic crud operation 
     List<Report> findByStatus(String status);
