@@ -1,5 +1,5 @@
 
-package com.financegov.serviceImpl;
+package com.financegov.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ import com.financegov.exceptions.AllocationNotFoundException;
 import com.financegov.exceptions.InvalidAllocationStatusException;
 import com.financegov.model.BudgetAllocation;
 import com.financegov.repository.BudgetAllocationRepository;
-import com.financegov.service.BudgetAllocationService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,5 +1,5 @@
 
-package com.financegov.serviceImpl;
+package com.financegov.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,6 @@ import com.financegov.enums.ResourceStatus;
 import com.financegov.exceptions.InvalidResourceStatusException;
 import com.financegov.model.Resource;
 import com.financegov.repository.ResourceRepository;
-import com.financegov.service.ResourceService;
 
 import lombok.RequiredArgsConstructor;
 
