@@ -3,9 +3,9 @@ package com.financegov.service;
 import java.util.List;
 import java.util.Map;
 
-import com.financegov.dtos.audit.AuditCreateRequest;
-import com.financegov.dtos.audit.AuditResponse;
-import com.financegov.dtos.audit.AuditUpdateRequest;
+import com.financegov.dto.AuditCreateRequest;
+import com.financegov.dto.AuditResponse;
+import com.financegov.dto.AuditUpdateRequest;
 
 import jakarta.validation.Valid;
 

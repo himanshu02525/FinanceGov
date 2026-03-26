@@ -1,4 +1,4 @@
-package com.financegov.dtos.audit;
+package com.financegov.dto;
 
 import com.financegov.enums.AuditScope;
 import com.financegov.enums.AuditStatus;

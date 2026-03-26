@@ -1,4 +1,4 @@
-package com.financegov.dtos.compliance;
+package com.financegov.dto;
 
 import java.time.LocalDateTime;
 

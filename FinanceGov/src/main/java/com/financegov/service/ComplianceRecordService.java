@@ -3,9 +3,9 @@ package com.financegov.service;
 import java.util.List;
 import java.util.Map;
 
-import com.financegov.dtos.compliance.ComplianceCreateRequest;
-import com.financegov.dtos.compliance.ComplianceResponse;
-import com.financegov.dtos.compliance.ComplianceUpdateRequest;
+import com.financegov.dto.ComplianceCreateRequest;
+import com.financegov.dto.ComplianceResponse;
+import com.financegov.dto.ComplianceUpdateRequest;
 
 public interface ComplianceRecordService {
 	List<ComplianceResponse> findAll();
