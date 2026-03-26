@@ -1,27 +1,21 @@
 package com.financegov.model;
 
-//schema of db table
 
-import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDate;
 
-@Data // automatically get getter and setter
-@Entity // used for creation of db table
+@Data
+@Entity
 @Table(name = "reports")
+// Entity class for storing generated reports
 public class Report {
-	@Id // stores unique value
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // automatically generates value from 1 to ...
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int reportId;   // Primary key
 
-	private String scope;
-	private String metrics;
-
-	@Column(name = "generated_date")
-	@JsonFormat(pattern = "yyyy-MM-dd") // for specific format
-	private LocalDate generatedDate;
-
-	private String status;
-	private double amount;
+    private String scope;   // Program/Subsidy/Tax
+    private String metrics; // Aggregated values
+    private LocalDate generatedDate; // Date when report was generated
 }
+
