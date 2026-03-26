@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(status).body(body);
 	}
 
-	//  DOMAIN EXCEPTIONS , the main business error that can occur
+	// DOMAIN EXCEPTIONS , the main business error that can occur
 	@ExceptionHandler({ InvalidAllocationStatusException.class, InvalidResourceStatusException.class })
 	public ResponseEntity<?> handleDomainExceptions(RuntimeException ex, HttpServletRequest request) {
 

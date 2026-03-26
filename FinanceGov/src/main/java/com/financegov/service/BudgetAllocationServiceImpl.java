@@ -1,4 +1,3 @@
-
 package com.financegov.service;
 
 import java.math.BigDecimal;
@@ -28,21 +27,25 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 	private final BudgetAllocationRepository budgetAllocationRepository;
 
 	private AllocationStatus mapStatus(String status) {
+		logger.debug("Mapping allocation status: {}", status);
 		try {
 			return AllocationStatus.valueOf(status.toUpperCase());
 		} catch (Exception ex) {
+			logger.error("Invalid allocation status received: {}", status);
 			throw new InvalidAllocationStatusException("Status must be either ALLOCATED or CANCELLED");
 		}
 	}
 
 	@Override
 	public BudgetAllocationResponseDTO createAllocation(BudgetAllocationRequestDTO dto) {
-		logger.info("Allocating budget to program {}", dto.getProgramId());
+		logger.info("Creating budget allocation for programId: {}", dto.getProgramId());
 
 		BudgetAllocation allocation = BudgetAllocation.builder().programId(dto.getProgramId()).amount(dto.getAmount())
 				.date(dto.getDate()).status(mapStatus(dto.getStatus())).build();
 
 		BudgetAllocation saved = budgetAllocationRepository.save(allocation);
+
+		logger.info("Budget allocation created successfully with allocationId: {}", saved.getAllocationId());
 
 		return BudgetAllocationResponseDTO.builder().allocationId(saved.getAllocationId())
 				.programId(saved.getProgramId()).amount(saved.getAmount()).date(saved.getDate())
@@ -51,42 +54,39 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 	@Override
 	public List<BudgetAllocationResponseDTO> getAllAllocations() {
+		logger.info("Fetching all budget allocations");
+
 		List<BudgetAllocationResponseDTO> responseList = new ArrayList<>();
 
 		for (BudgetAllocation allocation : budgetAllocationRepository.findAll()) {
+			logger.debug("Processing allocationId: {}", allocation.getAllocationId());
+
 			responseList.add(BudgetAllocationResponseDTO.builder().allocationId(allocation.getAllocationId())
 					.programId(allocation.getProgramId()).amount(allocation.getAmount()).date(allocation.getDate())
 					.status(allocation.getStatus().name()).build());
 		}
+
+		logger.info("Total allocations fetched: {}", responseList.size());
 		return responseList;
 	}
 
 	@Override
 	public BudgetSummaryDTO getBudgetSummary(Long programId) {
+		logger.info("Calculating budget summary for programId: {}", programId);
 
 		BigDecimal totalAllocated = BigDecimal.ZERO;
 
-		// Total budget allocated by Program Manager for this program
 		for (BudgetAllocation allocation : budgetAllocationRepository.findByProgramId(programId)) {
+			logger.debug("Adding allocation amount {} for allocationId {}", allocation.getAmount(),
+					allocation.getAllocationId());
 			totalAllocated = totalAllocated.add(allocation.getAmount());
 		}
 
-		// Once Module3 is implemented, this value will be
-		// SUM(of approved subsidy amounts for this program)
-
 		BigDecimal totalUsed = totalAllocated.multiply(new BigDecimal("0.30"));
-
-		// Remaining budget
 		BigDecimal remaining = totalAllocated.subtract(totalUsed);
 
-		// these will be used when 3rd module will be integrated
-		// ACTUAL used amount from Module3 (approved subsidies)
-		
-		// BigDecimal totalUsed = subsidyRepository.sumApprovedAmountByProgramId(programId);
-        // if (totalUsed == null) {
-		// totalUsed = BigDecimal.ZERO;
-	    // }
-
+		logger.info("Budget summary calculated for programId: {} | Allocated: {}, Used: {}, Remaining: {}", programId,
+				totalAllocated, totalUsed, remaining);
 
 		return BudgetSummaryDTO.builder().programId(programId).totalAllocated(totalAllocated).totalUsed(totalUsed)
 				.remaining(remaining).build();
@@ -94,10 +94,16 @@ public class BudgetAllocationServiceImpl implements BudgetAllocationService {
 
 	@Override
 	public String deleteAllocation(Long allocationId) {
-		BudgetAllocation allocation = budgetAllocationRepository.findById(allocationId)
-				.orElseThrow(() -> new AllocationNotFoundException("Budget allocation not found"));
+		logger.info("Deleting budget allocation with allocationId: {}", allocationId);
+
+		BudgetAllocation allocation = budgetAllocationRepository.findById(allocationId).orElseThrow(() -> {
+			logger.error("Budget allocation not found for allocationId: {}", allocationId);
+			return new AllocationNotFoundException("Budget allocation not found");
+		});
 
 		budgetAllocationRepository.delete(allocation);
+
+		logger.info("Budget allocation deleted successfully for allocationId: {}", allocationId);
 		return "Budget allocation deleted successfully";
 	}
 }
